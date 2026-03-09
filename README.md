@@ -28,7 +28,7 @@ Domain Expert: provide expert knowledge about career paths in CS and IT.
 Quality Assurance Tester: Ensures that the Expert system works correctly,reliably, and meets the project requirements before deployment. 
 
 
-##Features
+## Features
 	•	Rule-based career recommendation system
 	•	Interactive user interface
 	•	Knowledge base implemented in Prolog
@@ -36,13 +36,13 @@ Quality Assurance Tester: Ensures that the Expert system works correctly,reliabl
 	•	Explanation of recommendations provided by the system
 
 
-##Technical Stack
+## Technical Stack
 • Logic Engine: SWI-Prolog (Handles Symbolic AI and Inference).  
 • User Interface: Python with the pyswip library (Acts as the bridge between the user and the Knowledge Base).  
 • Inference Mechanism: Forward-chaining.  
 • Version Control: GitHub.
 
-##Directory Description
+## Directory Description
 Directory                     Description
 
 knowledge base               Contains Prolog facts and rules
@@ -52,18 +52,18 @@ interface                     Python scripts that interact with Prolog
 docs                          Documentation on knowledge acquisition and system design
 
 
-##Example Rule
+## Example Rule
 Example rule from the knowledge base:IF student has strong programming skills AND enjoys problem solving THEN recommend Software Engineering.
 
 
-##How to Run the System
+## How to Run the System
  Install Requirements
 	•	Python 3.x
 	•	SWI-Prolog
 	•	pyswip library
 
 
-##Career Paths Covered
+## Career Paths Covered
 The system currently provides recommendations for:
 	•	Software Engineering
 	•	Web Development
@@ -73,6 +73,6 @@ The system currently provides recommendations for:
 	•	Systems Analysis
 	•	Academic / Research Careers
 
-##Conclusion
+## Conclusion
 This project demonstrates the application of Artificial Intelligence and Expert Systems in solving real-world decision-making problems. By integrating expert knowledge with logical reasoning, the system provides structured career guidance to Computer Science and IT students.
 
