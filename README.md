@@ -25,7 +25,7 @@ Programmers: develop and implement the expert system software.
 
 Domain Expert: provide expert knowledge about career paths in CS and IT.
 
-Quality Assurance Tester: Ensures that the Expert system works correctly,reliably, and meets the project requirements before deployment. 
+Quality Assurance Tester: Ensures that the Expert system works correctly,reliably and meets the project requirements before deployment. 
 
 
 ## Features
@@ -74,5 +74,5 @@ The system currently provides recommendations for:
 	•	Academic / Research Careers
 
 ## Conclusion
-This project demonstrates the application of Artificial Intelligence and Expert Systems in solving real-world decision-making problems. By integrating expert knowledge with logical reasoning, the system provides structured career guidance to Computer Science and IT students.
+This project demonstrates the application of Artificial Intelligence and Expert Systems in solving real world decision making problems. By integrating expert knowledge with logical reasoning,the system provides structured career guidance to Computer Science and IT students.
 
