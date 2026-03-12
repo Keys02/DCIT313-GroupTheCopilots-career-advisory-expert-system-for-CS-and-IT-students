@@ -2,6 +2,7 @@
 
 career(software_engineer) :-
     prerequisite(programming, high),
+    (prerequisite(mathematics, medium); prerequisite(mathematics, high)),
     prerequisite(interest, coding).
 
 career(data_analyst) :-
