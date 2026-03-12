@@ -15,7 +15,9 @@ attributes = [
     {"name": "statistics", "type": "skill", "question": "Rate your statistics skill (high/medium/low): "},
     {"name": "networking", "type": "skill", "question": "Rate your networking skill (high/medium/low): "},
     {"name": "mathematics", "type": "skill", "question": "Rate your mathematics skill (high/medium/low): "},
-    {"name": "interest", "type": "interest", "question": "What are you most interested in? (coding/data/networks/security/designing): "}
+    {"name": "design", "type": "skill", "question": "Rate your design skill (high/medium/low): "},
+    {"name": "creativity", "type": "skill", "question": "Rate your creativity (high/medium/low): "},
+    {"name": "interest", "type": "interest", "question": "What are you most interested in? (coding/data/networks/security/design): "}
 ]
 
 user_inputs = {}
