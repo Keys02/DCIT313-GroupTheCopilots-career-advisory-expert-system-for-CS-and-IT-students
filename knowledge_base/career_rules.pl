@@ -10,6 +10,6 @@ career(data_analyst) :-
     prerequisite(interest, data).
 
 career(ui_ux_designer) :-
-    prerequisite(design, high),
-    prerequisite(creativity, high),
+    (prerequisite(design, high); prerequisite(design, medium)),
+    (prerequisite(creativity, high); prerequisite(creativity, medium)),
     prerequisite(interest, design).
