@@ -14,3 +14,8 @@ career(ui_ux_designer) :-
     (prerequisite(design, high); prerequisite(design, medium)),
     (prerequisite(creativity, high); prerequisite(creativity, medium)),
     prerequisite(interest, design).
+
+career(digital_marketer) :-
+    (prerequisite(communication, high); prerequisite(communication, medium)),
+    (prerequisite(creativity, high); prerequisite(creativity, medium)),
+    prerequisite(interest, marketing).
