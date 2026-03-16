@@ -36,9 +36,20 @@ results = list(prolog.query("career(X)"))
 print("\n") # Leave a space between question and career recommendations
 
 if results:
-    print("Recommended careers:")
+    print("Recommended careers:\n")
+
     for r in results:
-        print("-", r["X"])
+        career = r["X"]
+
+        reason_result = list(prolog.query(f"reason({career}, R)"))
+
+        print("-", career.replace("_", " ").title())
+
+        if reason_result:
+            reason_text = reason_result[0]["R"].decode("utf-8")
+            print("  Reason:", reason_text)
+
+        print()
 else:
     print("No matching careers found. Try adjusting your skills/interests.")
 
