@@ -1,28 +1,68 @@
 :- dynamic prerequisite/2.
 
-career(software_engineer) :-
-    prerequisite(programming, high),
-    (prerequisite(mathematics, medium); prerequisite(mathematics, high)),
-    prerequisite(interest, coding).
+% --------------------------
+% Career scoring rules
+% --------------------------
+career_score(software_engineer, Score) :-
+    score_programming(ProgScore),
+    score_mathematics(MathScore),
+    score_interest(InterestScore),
+    Score is ProgScore + MathScore + InterestScore.
 
-career(data_analyst) :-
-    prerequisite(statistics, high),
-    prerequisite(mathematics, high),
-    prerequisite(interest, data).
+career_score(data_analyst, Score) :-
+    score_statistics(StatsScore),
+    score_mathematics(MathScore),
+    score_interest_data(InterestScore),
+    Score is StatsScore + MathScore + InterestScore.
 
-career(ui_ux_designer) :-
-    (prerequisite(design, high); prerequisite(design, medium)),
-    (prerequisite(creativity, high); prerequisite(creativity, medium)),
-    prerequisite(interest, design).
+career_score(ui_ux_designer, Score) :-
+    score_design(DesignScore),
+    score_creativity(CreativeScore),
+    score_interest_design(InterestScore),
+    Score is DesignScore + CreativeScore + InterestScore.
 
-career(digital_marketer) :-
-    (prerequisite(communication, high); prerequisite(communication, medium)),
-    (prerequisite(creativity, high); prerequisite(creativity, medium)),
-    prerequisite(interest, marketing).
+career_score(digital_marketer, Score) :-
+    score_communication(CommScore),
+    score_creativity(CreativeScore),
+    score_interest_marketing(InterestScore),
+    Score is CommScore + CreativeScore + InterestScore.
 
+% --------------------------
+% Scoring components
+% --------------------------
+score_programming(40) :- prerequisite(programming, high), !.
+score_programming(0).
 
-/* Explanation rules */
+score_mathematics(30) :- (prerequisite(mathematics, medium); prerequisite(mathematics, high)), !.
+score_mathematics(0).
 
+score_statistics(40) :- prerequisite(statistics, high), !.
+score_statistics(0).
+
+score_design(30) :- (prerequisite(design, high); prerequisite(design, medium)), !.
+score_design(0).
+
+score_creativity(30) :- (prerequisite(creativity, high); prerequisite(creativity, medium)), !.
+score_creativity(0).
+
+score_communication(30) :- (prerequisite(communication, high); prerequisite(communication, medium)), !.
+score_communication(0).
+
+score_interest(30) :- prerequisite(interest, coding), !.
+score_interest(0).
+
+score_interest_data(30) :- prerequisite(interest, data), !.
+score_interest_data(0).
+
+score_interest_design(30) :- prerequisite(interest, design), !.
+score_interest_design(0).
+
+score_interest_marketing(30) :- prerequisite(interest, marketing), !.
+score_interest_marketing(0).
+
+% --------------------------
+% Reason rules
+% --------------------------
 reason(software_engineer,
 "Recommended because you have strong programming skills, sufficient mathematical ability, and a strong interest in coding and software development.").
 
