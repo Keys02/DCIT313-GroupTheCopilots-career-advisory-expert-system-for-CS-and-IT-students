@@ -27,9 +27,9 @@ career_score(digital_marketer, Score) :-
     score_interest_marketing(InterestScore),
     Score is CommScore + CreativeScore + InterestScore.
 
-% --------------------------
+% -------------------------------
 % Scoring components for skills
-% --------------------------
+% -------------------------------
 score_programming(40) :- prerequisite(programming, high), !.
 score_programming(25) :- prerequisite(programming, medium), !.
 score_programming(10) :- prerequisite(programming, low), !.
@@ -60,9 +60,9 @@ score_communication(20) :- prerequisite(communication, medium), !.
 score_communication(10) :- prerequisite(communication, low), !.
 score_communication(0).
 
-% --------------------------
+% -----------------------------------
 % Scoring components for interests
-% --------------------------
+% -----------------------------------
 score_interest_coding(30) :- prerequisite(interest, coding), !.
 score_interest_coding(0).
 

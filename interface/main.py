@@ -48,6 +48,16 @@ for name, value in user_inputs.items():
     prolog.assertz(f"prerequisite({name}, {value})")
 
 # -------------------------
+# Proper career display names
+# -------------------------
+display_names = {
+    "software_engineer": "Software Engineer",
+    "data_analyst": "Data Analyst",
+    "ui_ux_designer": "UI/UX Designer",
+    "digital_marketer": "Digital Marketer"
+}
+
+# -------------------------
 # Query all careers
 # -------------------------
 career_names = ["software_engineer", "data_analyst", "ui_ux_designer", "digital_marketer"]
@@ -88,7 +98,9 @@ if career_scores:
             if isinstance(reason_text, bytes):
                 reason_text = reason_text.decode("utf-8")
 
-        print(f"{career.replace('_',' ').title():<25} {bar} {score}%")
+        # Use proper display name
+        display_name = display_names.get(career, career.replace('_',' ').title())
+        print(f"{display_name:<25} {bar} {score}%")
         if reason_text:
             print(f"  Reason: {reason_text}")
         print()
