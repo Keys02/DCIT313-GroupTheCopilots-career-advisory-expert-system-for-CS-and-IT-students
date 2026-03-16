@@ -3,33 +3,73 @@
 % --------------------------
 % Career scoring rules
 % --------------------------
+
 career_score(software_engineer, Score) :-
-    score_programming(ProgScore),
-    score_mathematics(MathScore),
-    score_interest_coding(InterestScore),
-    Score is ProgScore + MathScore + InterestScore.
+    score_programming(P),
+    score_mathematics(M),
+    score_interest_coding(I),
+    Score is P + M + I.
 
 career_score(data_analyst, Score) :-
-    score_statistics(StatsScore),
-    score_mathematics(MathScore),
-    score_interest_data(InterestScore),
-    Score is StatsScore + MathScore + InterestScore.
+    score_statistics(S),
+    score_mathematics(M),
+    score_interest_data(I),
+    Score is S + M + I.
 
 career_score(ui_ux_designer, Score) :-
-    score_design(DesignScore),
-    score_creativity(CreativeScore),
-    score_interest_design(InterestScore),
-    Score is DesignScore + CreativeScore + InterestScore.
+    score_design(D),
+    score_creativity(C),
+    score_interest_design(I),
+    Score is D + C + I.
 
 career_score(digital_marketer, Score) :-
-    score_communication(CommScore),
-    score_creativity(CreativeScore),
-    score_interest_marketing(InterestScore),
-    Score is CommScore + CreativeScore + InterestScore.
+    score_communication(C),
+    score_creativity(CR),
+    score_interest_marketing(I),
+    Score is C + CR + I.
 
-% -------------------------------
-% Scoring components for skills
-% -------------------------------
+career_score(machine_learning_engineer, Score) :-
+    score_programming(P),
+    score_mathematics(M),
+    score_statistics(S),
+    score_interest_data(I),
+    Score is P + M + S + I.
+
+career_score(cybersecurity_analyst, Score) :-
+    score_networking(N),
+    score_programming(P),
+    score_interest_security(I),
+    Score is N + P + I.
+
+career_score(network_engineer, Score) :-
+    score_networking(N),
+    score_mathematics(M),
+    score_interest_networks(I),
+    Score is N + M + I.
+
+career_score(game_developer, Score) :-
+    score_programming(P),
+    score_creativity(C),
+    score_mathematics(M),
+    score_interest_coding(I),
+    Score is P + C + M + I.
+
+career_score(product_designer, Score) :-
+    score_design(D),
+    score_creativity(C),
+    score_communication(COM),
+    score_interest_design(I),
+    Score is D + C + COM + I.
+
+career_score(technical_writer, Score) :-
+    score_communication(C),
+    score_creativity(CR),
+    Score is C + CR.
+
+% --------------------------
+% Skill scoring
+% --------------------------
+
 score_programming(40) :- prerequisite(programming, high), !.
 score_programming(25) :- prerequisite(programming, medium), !.
 score_programming(10) :- prerequisite(programming, low), !.
@@ -60,9 +100,15 @@ score_communication(20) :- prerequisite(communication, medium), !.
 score_communication(10) :- prerequisite(communication, low), !.
 score_communication(0).
 
-% -----------------------------------
-% Scoring components for interests
-% -----------------------------------
+score_networking(40) :- prerequisite(networking, high), !.
+score_networking(25) :- prerequisite(networking, medium), !.
+score_networking(10) :- prerequisite(networking, low), !.
+score_networking(0).
+
+% --------------------------
+% Interest scoring
+% --------------------------
+
 score_interest_coding(30) :- prerequisite(interest, coding), !.
 score_interest_coding(0).
 
@@ -75,17 +121,42 @@ score_interest_design(0).
 score_interest_marketing(30) :- prerequisite(interest, marketing), !.
 score_interest_marketing(0).
 
+score_interest_security(30) :- prerequisite(interest, security), !.
+score_interest_security(0).
+
+score_interest_networks(30) :- prerequisite(interest, networks), !.
+score_interest_networks(0).
+
 % --------------------------
-% Reason rules
+% Reasons
 % --------------------------
+
 reason(software_engineer,
-"Recommended because you have programming skills, some mathematical ability, and an interest in coding and software development.").
+"Recommended because you have programming skills and mathematical ability with an interest in software development.").
 
 reason(data_analyst,
-"Recommended because you have statistics and mathematical skills along with an interest in analyzing and interpreting data.").
+"Recommended because you demonstrate strong statistics and mathematics skills with interest in analyzing data.").
 
 reason(ui_ux_designer,
-"Recommended because you show design ability, creativity, and an interest in creating visually appealing and user-friendly digital experiences.").
+"Recommended because you show design ability, creativity and interest in building user-friendly interfaces.").
 
 reason(digital_marketer,
-"Recommended because you have communication skills, creativity, and an interest in marketing and promoting products through digital platforms.").
+"Recommended because you demonstrate communication skills, creativity and interest in digital marketing.").
+
+reason(machine_learning_engineer,
+"Recommended because you combine programming, mathematics and statistics with interest in intelligent systems and data.").
+
+reason(cybersecurity_analyst,
+"Recommended because you show networking and programming ability with interest in protecting systems and information.").
+
+reason(network_engineer,
+"Recommended because you have networking knowledge and interest in designing and managing computer networks.").
+
+reason(game_developer,
+"Recommended because you combine programming, creativity and mathematics with interest in game development.").
+
+reason(product_designer,
+"Recommended because you demonstrate design, creativity and communication skills suited for designing digital products.").
+
+reason(technical_writer,
+"Recommended because you have strong communication and creativity skills useful for explaining technical concepts clearly.").
