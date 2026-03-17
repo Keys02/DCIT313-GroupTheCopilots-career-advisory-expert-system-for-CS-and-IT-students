@@ -143,14 +143,14 @@ reason(ui_ux_designer,
 reason(digital_marketer,
 "Recommended because you demonstrate communication skills, creativity and interest in digital marketing.").
 
-reason(machine_learning_engineer,
-"Recommended because you combine programming, mathematics and statistics with interest in intelligent systems and data.").
+reason(network_engineer,
+"Recommended because you have networking knowledge and interest in designing and managing computer networks.").
 
 reason(cybersecurity_analyst,
 "Recommended because you show networking and programming ability with interest in protecting systems and information.").
 
-reason(network_engineer,
-"Recommended because you have networking knowledge and interest in designing and managing computer networks.").
+reason(machine_learning_engineer,
+"Recommended because you combine programming, mathematics and statistics with interest in intelligent systems and data.").
 
 reason(game_developer,
 "Recommended because you combine programming, creativity and mathematics with interest in game development.").
