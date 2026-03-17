@@ -149,7 +149,8 @@ reason(network_engineer,
 reason(cybersecurity_analyst,
 "Recommended because you show networking and programming ability with interest in protecting systems and information.").
 
-
+reason(machine_learning_engineer,
+"Recommended because you combine programming, mathematics and statistics with interest in intelligent systems and data.").
 
 reason(game_developer,
 "Recommended because you combine programming, creativity and mathematics with interest in game development.").
