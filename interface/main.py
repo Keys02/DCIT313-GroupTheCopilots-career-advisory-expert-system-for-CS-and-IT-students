@@ -1,17 +1,10 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
 from pyswip import Prolog
 import os
 
-# Function to create a visual progress bar based on percentage score
-def progress_bar(score, max_blocks=10):
-    # Convert percentage score into number of filled blocks
-    num_blocks = int((score / 100) * max_blocks)
-    return "█" * num_blocks + " " * (max_blocks - num_blocks)
-
 # Initialize Prolog engine
 prolog = Prolog()
-
-# Clear any previous user inputs stored in Prolog
-prolog.retractall("prerequisite(_,_)")
 
 # Get the current file directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,33 +13,23 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 kb_path = os.path.join(current_dir, "..", "knowledge_base", "career_rules.pl")
 
 # Load the Prolog knowledge base
-prolog.consult(kb_path)
+try:
+    prolog.consult(kb_path)
+except Exception as e:
+    print(f"Failed to load knowledge base: {e}")
 
 # List of questions to ask the user
 attributes = [
-    {"name": "programming", "question": "Rate your programming skill (high/medium/low): "},
-    {"name": "statistics", "question": "Rate your statistics skill (high/medium/low): "},
-    {"name": "networking", "question": "Rate your networking skill (high/medium/low): "},
-    {"name": "mathematics", "question": "Rate your mathematics skill (high/medium/low): "},
-    {"name": "design", "question": "Rate your design skill (high/medium/low): "},
-    {"name": "creativity", "question": "Rate your creativity (high/medium/low): "},
-    {"name": "communication", "question": "Rate your communication skill (high/medium/low): "},
-    {"name": "interest", "question": "What are you most interested in? (coding/data/design/marketing/security/networks): "}
+    {"name": "programming", "label": "Rate your programming skill:", "options": ["high", "medium", "low"]},
+    {"name": "statistics", "label": "Rate your statistics skill:", "options": ["high", "medium", "low"]},
+    {"name": "networking", "label": "Rate your networking skill:", "options": ["high", "medium", "low"]},
+    {"name": "mathematics", "label": "Rate your mathematics skill:", "options": ["high", "medium", "low"]},
+    {"name": "design", "label": "Rate your design skill:", "options": ["high", "medium", "low"]},
+    {"name": "creativity", "label": "Rate your creativity:", "options": ["high", "medium", "low"]},
+    {"name": "communication", "label": "Rate your communication skill:", "options": ["high", "medium", "low"]},
+    {"name": "interest", "label": "What are you most interested in?", "options": ["coding", "data", "design", "marketing", "security", "networks"]}
 ]
 
-# Dictionary to store user responses
-user_inputs = {}
-
-# Ask user all questions and store responses
-for attr in attributes:
-    ans = input(attr["question"]).strip().lower()
-    user_inputs[attr["name"]] = ans
-
-# Send user inputs to Prolog as facts
-for name, value in user_inputs.items():
-    prolog.assertz(f"prerequisite({name}, {value})")
-
-# List of careers to evaluate
 career_names = [
     "software_engineer",
     "data_analyst",
@@ -60,7 +43,6 @@ career_names = [
     "technical_writer"
 ]
 
-# Friendly display names for output
 display_names = {
     "software_engineer": "Software Engineer",
     "data_analyst": "Data Analyst",
@@ -74,7 +56,6 @@ display_names = {
     "technical_writer": "Technical Writer"
 }
 
-# Maximum possible score for each career (used for normalization)
 max_scores = {
     "software_engineer": 100,
     "data_analyst": 100,
@@ -88,93 +69,144 @@ max_scores = {
     "technical_writer": 60
 }
 
-# List to store computed career scores
-career_scores = []
+class CareerAdvisorApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Career Advisory Expert System")
+        self.geometry("600x600")
+        self.configure(padx=20, pady=20)
+        
+        self.input_vars = {}
+        
+        self.create_widgets()
 
-# Loop through each career and calculate its score
-for career in career_names:
+    def create_widgets(self):
+        title_label = ttk.Label(self, text="Career Advisory Expert System", font=("Helvetica", 16, "bold"))
+        title_label.pack(pady=(0, 20))
+        
+        input_frame = ttk.Frame(self)
+        input_frame.pack(fill=tk.BOTH, expand=True)
 
-    # Query Prolog to compute score for this career
-    result = list(prolog.query(f"career_score({career}, S)"))
+        for i, attr in enumerate(attributes):
+            lbl = ttk.Label(input_frame, text=attr["label"])
+            lbl.grid(row=i, column=0, sticky=tk.W, pady=10, padx=5)
 
-    if result:
-        # Get raw score from Prolog
-        raw_score = result[0]["S"]
+            var = tk.StringVar(self)
+            var.set(attr["options"][0])  # Set default value
+            self.input_vars[attr["name"]] = var
 
-        # Get maximum possible score for this career
-        max_score = max_scores[career]
+            cb = ttk.Combobox(input_frame, textvariable=var, values=attr["options"], state="readonly")
+            cb.grid(row=i, column=1, sticky=tk.EW, pady=10, padx=5)
 
-        # Convert raw score into percentage
-        score = int((raw_score / max_score) * 100)
-    else:
-        # If no result, assign 0
-        score = 0
+        input_frame.columnconfigure(1, weight=1)
 
-    # Store the result
-    career_scores.append({
-        "career": career,
-        "score": score
-    })
+        submit_btn = ttk.Button(self, text="Get Recommendations", command=self.evaluate_careers)
+        submit_btn.pack(pady=20)
 
-# Remove careers with 0% score (not suitable)
-career_scores = [c for c in career_scores if c["score"] > 0]
+    def evaluate_careers(self):
+        # Clear any previous user inputs stored in Prolog
+        try:
+            prolog.retractall("prerequisite(_,_)")
+        except Exception as e:
+            messagebox.showerror("Prolog Error", f"Error communicating with Prolog: {e}")
+            return
 
-# Sort careers from highest score to lowest
-career_scores.sort(key=lambda x: x["score"], reverse=True)
+        user_inputs = {name: var.get().lower() for name, var in self.input_vars.items()}
 
-# Print header
-print("\nCareer Suitability Results")
-print("-" * 50)
+        for name, value in user_inputs.items():
+            prolog.assertz(f"prerequisite({name}, {value})")
 
-# If there are suitable careers
-if career_scores:
+        career_scores = []
+        for career in career_names:
+            result = list(prolog.query(f"career_score({career}, S)"))
+            
+            if result:
+                raw_score = result[0]["S"]
+                max_score = max_scores.get(career, 100)
+                score = int((raw_score / max_score) * 100)
+            else:
+                score = 0
+            
+            career_scores.append({
+                "career": career,
+                "score": score
+            })
 
-    # Loop through each career and display results
-    for item in career_scores:
+        career_scores = [c for c in career_scores if c["score"] > 0]
+        career_scores.sort(key=lambda x: x["score"], reverse=True)
 
-        career = item["career"]
-        score = item["score"]
+        self.show_results(career_scores)
 
-        # Generate progress bar
-        bar = progress_bar(score)
+    def show_results(self, career_scores):
+        results_window = tk.Toplevel(self)
+        results_window.title("Career Suitability Results")
+        results_window.geometry("700x600")
+        results_window.configure(padx=20, pady=20)
+        
+        # Scrollable area
+        canvas = tk.Canvas(results_window)
+        scrollbar = ttk.Scrollbar(results_window, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
-        # Get explanation (reason) from Prolog
-        reason_query = list(prolog.query(f"reason({career}, R)"))
+        if not career_scores:
+            ttk.Label(scrollable_frame, text="No suitable careers found.", font=("Helvetica", 14)).pack(pady=20)
+            return
 
-        reason_text = ""
+        ttk.Label(scrollable_frame, text="Career Suitability Results", font=("Helvetica", 16, "bold")).pack(pady=(0, 20))
 
-        if reason_query:
-            reason_text = reason_query[0]["R"]
+        for item in career_scores:
+            career = item["career"]
+            score = item["score"]
+            name = display_names.get(career, career.replace("_", " ").title())
+            
+            reason_query = list(prolog.query(f"reason({career}, R)"))
+            reason_text = ""
+            if reason_query:
+                reason_text = reason_query[0]["R"]
+                if isinstance(reason_text, bytes):
+                    reason_text = reason_text.decode("utf-8")
 
-            # Decode if returned as bytes
-            if isinstance(reason_text, bytes):
-                reason_text = reason_text.decode("utf-8")
+            frame = ttk.Frame(scrollable_frame, borderwidth=1, relief="solid", padding=10)
+            frame.pack(fill=tk.X, expand=True, pady=5)
 
-        # Get display-friendly name
-        name = display_names.get(career)
+            header_frame = ttk.Frame(frame)
+            header_frame.pack(fill=tk.X)
+            
+            ttk.Label(header_frame, text=name, font=("Helvetica", 12, "bold")).pack(side=tk.LEFT)
+            ttk.Label(header_frame, text=f"{score}%", font=("Helvetica", 12, "bold")).pack(side=tk.RIGHT)
+            
+            progress = ttk.Progressbar(frame, orient="horizontal", mode="determinate", length=400)
+            progress["value"] = score
+            progress.pack(fill=tk.X, pady=5)
 
-        # Print career name, progress bar and score
-        print(f"{name:<30} {bar} {score}%")
+            if reason_text:
+                ttk.Label(frame, text=f"Reason: {reason_text}", wraplength=550).pack(fill=tk.X, pady=(5,0))
 
-        # Print explanation if available
-        if reason_text:
-            print(f"  Reason: {reason_text}")
+        # Show best recommendation at the end
+        best = career_scores[0]
+        best_name = display_names.get(best["career"], best["career"].replace("_", " ").title())
+        best_score = best["score"]
 
-        print()
+        summary_frame = ttk.Frame(scrollable_frame, padding=15)
+        summary_frame.pack(fill=tk.X, expand=True, pady=20)
+        
+        ttk.Label(summary_frame, text="Top Career Recommendation", font=("Helvetica", 14, "bold")).pack()
+        ttk.Label(summary_frame, text=f"{best_name} ({best_score}%) is your best career match based on your skills and interests.", wraplength=550, justify=tk.CENTER).pack(pady=10)
 
-    # Get the best career (highest score)
-    best = career_scores[0]
-
-    best_name = display_names.get(best["career"])
-    best_score = best["score"]
-
-    # Print top recommendation
-    print("-" * 50)
-    print("Top Career Recommendation")
-    print("-" * 50)
-    print(f"{best_name} ({best_score}%) is your best career match based on your skills and interests.")
-
-else:
-    # If no suitable careers found
-    print("No suitable careers found.")
+if __name__ == "__main__":
+    app = CareerAdvisorApp()
+    app.mainloop()
 
