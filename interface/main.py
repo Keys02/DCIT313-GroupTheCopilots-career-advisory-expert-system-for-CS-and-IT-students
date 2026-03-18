@@ -124,6 +124,7 @@ class CareerAdvisorApp(tk.Tk):
                 raw_score = result[0]["S"]
                 max_score = max_scores.get(career, 100)
                 score = int((raw_score / max_score) * 100)
+                score = min(score, 100)
             else:
                 score = 0
             
@@ -167,6 +168,17 @@ class CareerAdvisorApp(tk.Tk):
 
         ttk.Label(scrollable_frame, text="Career Suitability Results", font=("Helvetica", 16, "bold")).pack(pady=(0, 20))
 
+        # Show best recommendation at the top
+        best = career_scores[0]
+        best_name = display_names.get(best["career"], best["career"].replace("_", " ").title())
+        best_score = best["score"]
+
+        summary_frame = ttk.Frame(scrollable_frame, padding=15)
+        summary_frame.pack(fill=tk.X, expand=True, pady=(0, 20))
+        
+        ttk.Label(summary_frame, text="Top Career Recommendation", font=("Helvetica", 14, "bold")).pack()
+        ttk.Label(summary_frame, text=f"{best_name} ({best_score}%) is your best career match based on your skills and interests.", wraplength=550, justify=tk.CENTER).pack(pady=10)
+
         for item in career_scores:
             career = item["career"]
             score = item["score"]
@@ -194,17 +206,6 @@ class CareerAdvisorApp(tk.Tk):
 
             if reason_text:
                 ttk.Label(frame, text=f"Reason: {reason_text}", wraplength=550).pack(fill=tk.X, pady=(5,0))
-
-        # Show best recommendation at the end
-        best = career_scores[0]
-        best_name = display_names.get(best["career"], best["career"].replace("_", " ").title())
-        best_score = best["score"]
-
-        summary_frame = ttk.Frame(scrollable_frame, padding=15)
-        summary_frame.pack(fill=tk.X, expand=True, pady=20)
-        
-        ttk.Label(summary_frame, text="Top Career Recommendation", font=("Helvetica", 14, "bold")).pack()
-        ttk.Label(summary_frame, text=f"{best_name} ({best_score}%) is your best career match based on your skills and interests.", wraplength=550, justify=tk.CENTER).pack(pady=10)
 
 if __name__ == "__main__":
     app = CareerAdvisorApp()
